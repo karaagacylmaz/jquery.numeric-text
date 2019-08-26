@@ -1,0 +1,66 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <input type="text" id="nmbr" numeric-text name="name" value="" />
+</div>
+<script src="~/js/site.js"></script>
+<script>
+    $(document).ready(function () {
+        function setMoneyFormat(payment) {
+            var formattedMoney = "";
+            var data = "";
+            var length = payment.toString().indexOf('.');
+
+            if (length == -1) {
+                data = payment.toString();
+            }
+            else {
+                data = payment.toString().substr(0, length);
+            }
+
+            data = reverseString(data);
+
+            var dataArray = data.split(/(.{0,3})/g);
+
+            dataArray.forEach(function (element) {
+                if (element != "") {
+                    formattedMoney += element + ".";
+                }
+            });
+
+            if (formattedMoney[formattedMoney.length - 1] == ".") {
+                formattedMoney = formattedMoney.substr(0, formattedMoney.length - 1);
+            }
+
+            formattedMoney = reverseString(formattedMoney);
+            return formattedMoney;
+        }
+        function reverseString(text) {
+
+            text = text.split("");
+            text = text.reverse();
+            text = text.join("");
+
+            return text;
+        }
+        $('input[numeric-text]').keyup(function (e) {
+            $(this).val(setMoneyFormat($(this).val().replace(/\./g, "")));
+        });
+
+        $('input[numeric-text]').keypress(function (e) {
+            var x = e.which || e.keycode;
+            if ((x >= 48 && x <= 57) || x == 8) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        })
+    });
+</script>
